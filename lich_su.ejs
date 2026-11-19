@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch sử tham gia tình nguyện - TVU</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">← Quay lại Danh sách hoạt động</a>
+            <span class="text-white">Sinh viên: <strong><%= user.ho_ten %></strong> (<%= user.mssv %>)</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h4 class="fw-bold text-primary mb-3">Lịch sử đăng ký & Kết quả tham gia tình nguyện</h4>
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <table class="table table-bordered table-hover align-middle mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Tên hoạt động</th>
+                            <th>Đơn vị tổ chức</th>
+                            <th>Thời gian & Địa điểm</th>
+                            <th>Trạng thái duyệt</th>
+                            <th>Kết quả ghi nhận</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (lichSu.length === 0) { %>
+                            <tr><td colspan="6" class="text-center text-muted py-3">Bạn chưa đăng ký hoạt động tình nguyện nào.</td></tr>
+                        <% } %>
+                        <% lichSu.forEach(item => { %>
+                            <tr>
+                                <td class="fw-bold"><%= item.tieu_de %></td>
+                                <td><%= item.ten_don_vi %></td>
+                                <td class="small">
+                                    <%= new Date(item.thoi_gian_bat_dau).toLocaleString('vi-VN') %><br>
+                                    <span class="text-muted"><%= item.dia_diem %></span>
+                                </td>
+                                <td>
+                                    <% if (item.trang_thai_duyet === 'cho_duyet') { %>
+                                        <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                    <% } else if (item.trang_thai_duyet === 'da_duyet') { %>
+                                        <span class="badge bg-success">Đã xác nhận tham gia</span>
+                                    <% } else { %>
+                                        <span class="badge bg-danger">Từ chối</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (item.ket_qua === 'hoan_thanh') { %>
+                                        <span class="badge bg-primary">✔ Hoàn thành tốt</span>
+                                    <% } else if (item.ket_qua === 'vang_mat') { %>
+                                        <span class="badge bg-danger">✘ Vắng mặt</span>
+                                    <% } else { %>
+                                        <span class="text-muted small">Chưa cập nhật</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (item.trang_thai_duyet === 'cho_duyet') { %>
+                                        <form method="POST" action="/huy-dang-ky/<%= item.id %>">
+                                            <button class="btn btn-outline-danger btn-sm">Hủy đăng ký</button>
+                                        </form>
+                                    <% } else { %>
+                                        <span class="text-muted small">--</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
